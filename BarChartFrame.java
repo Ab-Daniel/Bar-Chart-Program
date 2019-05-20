@@ -1,90 +1,56 @@
 import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
+
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
-public class BarChartFrame extends JComponent
+public class BarChartFrame extends JFrame 
 {
-	
+	private static final long serialVersionUID = 1L;
 	public BarChartFrame()
 	{
+		final BarChartPanel panel = new BarChartPanel();
 		
-		controlPanel = new JPanel();
-		barButton = makeButton("Draw");
-		JLabel heightLabel = new JLabel("Bar Height = ");
-		heightField = new JTextField(5);
+		JPanel buttonP = new JPanel();
+		buttonP.setLayout(new GridLayout(1, 3));
+		buttonP.add(new JLabel("Bar height = ", SwingConstants.RIGHT));
+		final JTextField height = new JTextField(15);
+		height.setEditable(true);
+		buttonP.add(height);
 		
-		controlPanel.add(heightLabel);
-		controlPanel.add(heightField);
-		controlPanel.add(barButton);
-		add(controlPanel, BorderLayout.NORTH);
-	
-	}
-	
-	
-	
-	
-	public void paintComponent(Graphics g)
-	{
-		
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D)g;
-		
-	}
-	
-	public JButton makeButton(String name)
-	{
-		
-		JButton button = new JButton(name);
-		
-		class BarButtonListener implements ActionListener
-		{
-			
+		JButton button = new JButton("Add Bar");
+		class Listener implements ActionListener
+		{  
 			public void actionPerformed(ActionEvent event)
-			{
-				int n = 5; 
-				System.out.println(":P");
-				double height = Double.parseDouble(heightField.getText());
-				if(height > getHeight() - controlPanel.getHeight() - 5)
+			{  
+				String s = height.getText();
+				int i = Integer.parseInt(s);
+				double v = 0;
+				if(i>0)
 				{
-					bar = new Rectangle2D.Double(n, getHeight() - controlPanel.getHeight() - 5, 25, getHeight() - controlPanel.getHeight() - 5);
+					v = Integer.parseInt(s);
+					panel.newBar(v);
 				}
-				
-				if(height < getHeight() - controlPanel.getHeight() - 5)
-				{
-					bar = new Rectangle2D.Double(n, height - 5, 25, height);
-				}
-				
-				n=n + 30; 
-				
-				repaint();
-				
+				else 
+					JOptionPane.showMessageDialog(null, "The values entered are not valid");
+				height.setText("");
 			}
-			
-		}
-		
-		ActionListener listener = new BarButtonListener();
+		}	
+		ActionListener listener = new Listener();
 		button.addActionListener(listener);
-		return button;
+		buttonP.add(button);
+		getContentPane().add(buttonP, BorderLayout.NORTH);
 		
+		getContentPane().add(panel, BorderLayout.CENTER);
+		setTitle("Barchart");
+		pack();
+		setSize(600, 600);
 	}
-		
-		
-	
-	
-	private JButton barButton;
-	private JPanel controlPanel;
-	//private JPanel displayPanel;
-	private Rectangle2D bar;
-	private JTextField heightField;
-	
 }
