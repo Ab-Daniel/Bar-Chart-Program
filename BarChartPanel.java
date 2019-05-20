@@ -1,37 +1,31 @@
-import java.awt.BorderLayout;
-import java.awt.geom.Line2D;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-public class BarChartPanel extends JPanel
+public class BarChartPanel extends JPanel 
 {
-	
+	private static final long serialVersionUID = 1L;
 	public BarChartPanel()
 	{
-		
-		JPanel controlPanel = new JPanel();
-		JButton barButton = new JButton("Add Bar");
-		JLabel heightLabel = new JLabel("Bar Height = ");
-		controlPanel.add(heightLabel);
-		controlPanel.add(heightField);
-		controlPanel.add(barButton);
-		add(controlPanel, BorderLayout.NORTH);
-		
-		JPanel displayPanel = new JPanel();
-		add(displayPanel);
-		
-		bottom = new Line2D.Double(0, 5, getWidth(), 5);
-		
-		
-		
+		chart = new BarChart();
+		setSize(500, 500);
 	}
-	
-	
-	private Line2D.Double bottom;
-	
-	final static JTextField heightField = new JTextField(5);
-	
+	public void newBar(double value)
+	{
+		chart.add(value);
+		repaint();
+	}
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D)g;
+		try
+		{
+			chart.draw(g2, getWidth(), getHeight());
+		}
+		catch(IndexOutOfBoundsException e){}
+	}
+	private BarChart chart;
 }
+
